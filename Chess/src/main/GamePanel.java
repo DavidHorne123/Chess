@@ -24,6 +24,7 @@ public class GamePanel extends JPanel implements Runnable{
 	final int FPS = 60;
 	Thread gameThread;
 	Board board = new Board();
+	Mouse mouse = new Mouse();
 	
 	// PIECES
 	// Both ArrayLists contain the pieces currently on the board
@@ -31,6 +32,8 @@ public class GamePanel extends JPanel implements Runnable{
 	// the player made
 	public static ArrayList<Piece> pieces = new ArrayList<>();
 	public static ArrayList<Piece> simPieces = new ArrayList<>();	
+	// The piece that the player is currently holding
+	Piece activeP;
 	
 	// COLOR
 	public static final int WHITE = 0;
@@ -41,6 +44,9 @@ public class GamePanel extends JPanel implements Runnable{
 	public GamePanel() {
 		setPreferredSize(new Dimension(WIDTH,HEIGHT));
 		setBackground(Color.black);
+		// The program can detect the player's mouse movement or action
+		addMouseMotionListener(mouse);
+		addMouseListener(mouse);
 		
 		setPieces();
 		// pass the pieces as the source
@@ -132,6 +138,44 @@ public class GamePanel extends JPanel implements Runnable{
 		
 	}
 	private void update() {
+		
+		if(mouse.pressed) {
+			// MOUSE BUTTON PRESSED 
+			// check if activeP is null
+			// Which means the player is not holding a piece
+			if(activeP == null) {
+				// We scan the simPieces arrayList
+				for(Piece piece : simPieces) {
+					// If one of these pieces has the same color as the current color
+					if(piece.color == currentColor &&
+							// And also same col as this mouse 
+							// We get the col by dividing the mouse current x by the square size
+							piece.col == mouse.x/Board.SQUARE_SIZE &&
+							piece.row == mouse.y/Board.SQUARE_SIZE){
+						// If one of these pieces has the same color and the same
+						// col and the same row 
+						// then that means the player's mouse is on this piece
+						// So the player can pick it up 
+						activeP = piece;
+					}
+				}
+			}
+			else {
+				// If the player is holding a piece, stimulate the move
+				stimulate();
+			}
+		}
+		
+	}
+	private void stimulate() {
+
+		// If a piece is being held, update its position
+		// Here we update the activeP's x and y based on the player's mouse position
+		// subtract half square size from the x and y
+		activeP.x = mouse.x - Board.HALF_SQUARE_SIZE;
+		activeP.y = mouse.y - Board.HALF_SQUARE_SIZE;
+		
+		
 		
 	}
 	public void paintComponent(Graphics g) {
