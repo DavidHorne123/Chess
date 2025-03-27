@@ -1,6 +1,7 @@
 package main;
 
 import java.util.ArrayList;
+import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -166,6 +167,19 @@ public class GamePanel extends JPanel implements Runnable{
 			}
 		}
 		
+		// MOUSE BUTTON RELEASED
+		// If the player releases the mouse button
+		if(mouse.pressed == false) {
+			// When they are holding a piece
+			if(activeP != null) {
+				// Calling the updatePosition method
+				// And adjust its position
+				activeP.updatePosition();
+				// Make activeP null since the player released the piece
+				activeP = null;
+			}
+		}
+		
 	}
 	private void stimulate() {
 
@@ -174,7 +188,9 @@ public class GamePanel extends JPanel implements Runnable{
 		// subtract half square size from the x and y
 		activeP.x = mouse.x - Board.HALF_SQUARE_SIZE;
 		activeP.y = mouse.y - Board.HALF_SQUARE_SIZE;
-		
+		// The color of the square that the active P is currently on changes
+		activeP.col = activeP.getCol(activeP.x);
+		activeP.row = activeP.getRow(activeP.y);
 		
 		
 	}
@@ -190,6 +206,21 @@ public class GamePanel extends JPanel implements Runnable{
 		// enhanced for loop
 		for(Piece p : simPieces) {
 			p.draw(g2);
+		}
+		// If activeP is not null
+		if(activeP != null) {
+			// First we set the color on graphics 2D
+			g2.setColor(Color.white);
+			g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f));
+			// Draw a rectangle
+			// X is col 
+			// Y is row
+			g2.fillRect(activeP.col*Board.SQUARE_SIZE, activeP.row*Board.SQUARE_SIZE, 
+					Board.SQUARE_SIZE, Board.SQUARE_SIZE);
+			g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+			
+			// Draw the active piece in the end so it won't be hidden by the board or the colored square
+			activeP.draw(g2);
 		}
 	}
 	
