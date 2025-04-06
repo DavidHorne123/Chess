@@ -189,6 +189,7 @@ public class Piece {
 				}
 			}
 			
+			// If none of them true that means there is no piece on the line
 			return false;
 		}
 		public void draw(Graphics2D g2) {
