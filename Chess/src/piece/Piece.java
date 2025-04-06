@@ -93,6 +93,13 @@ public class Piece {
 			}
 			return false;
 		}
+		public boolean isSameSquare(int targetCol, int targetRow) {
+			// If both targetCol and targetRow are the same return true
+			if(targetCol == preCol && targetRow == preRow) {
+				return true;
+			}
+			return false;
+		}
 		// Instance method called getHittingP
 		// Piece is the return type
 		public Piece getHittingP(int targetCol, int targetRow) {
@@ -122,6 +129,65 @@ public class Piece {
 				}
 			}
 			
+			
+			return false;
+		}
+		public boolean pieceIsOnStraightLine(int targetCol, int targetRow) {
+			
+			// When this piece is moving to the left
+			// For loop starts at preCol -1 and col decreases 
+			// as long as col is less than the targetCol
+			for(int c = preCol-1; c > targetCol; c--) {
+				// We scan the simPieces and check if there is a piece on the square
+				for(Piece piece : GamePanel.simPieces) {
+					// If there is a piece to match this condition that means
+					// This piece is on the line
+					if(piece.col == c && piece.row == targetRow) {
+						// So we set it as hittingP
+						hittingP = piece;
+						return true;
+					}
+				}
+			}
+			// When this piece is moving to the right
+			for(int c = preCol+1; c < targetCol; c++) {
+				// We scan the simPieces and check if there is a piece on the square
+				for(Piece piece : GamePanel.simPieces) {
+					// If there is a piece to match this condition that means
+					// This piece is on the line
+					if(piece.col == c && piece.row == targetRow) {
+						// So we set it as hittingP
+						hittingP = piece;
+						return true;
+					}
+				}
+			}
+			// When this piece is moving up
+			for(int r = preRow-1; r > targetRow; r--) {
+				// We scan the simPieces and check if there is a piece on the square
+				for(Piece piece : GamePanel.simPieces) {
+					// If there is a piece to match this condition that means
+					// This piece is on the line
+					if(piece.col == targetCol && piece.row == r) {
+						// So we set it as hittingP
+						hittingP = piece;
+						return true;
+					}
+				}
+			}
+			// When this piece is moving down
+			for(int r = preRow+1; r < targetRow; r++) {
+				// We scan the simPieces and check if there is a piece on the square
+				for(Piece piece : GamePanel.simPieces) {
+					// If there is a piece to match this condition that means
+					// This piece is on the line
+					if(piece.col == targetCol && piece.row == r) {
+						// So we set it as hittingP
+						hittingP = piece;
+						return true;
+					}
+				}
+			}
 			
 			return false;
 		}
