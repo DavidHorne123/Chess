@@ -192,6 +192,79 @@ public class Piece {
 			// If none of them true that means there is no piece on the line
 			return false;
 		}
+		public boolean pieceIsOnDiagonalLine(int targetCol, int targetRow) {
+			
+			if(targetRow < preRow) {
+				// Up left
+				// We start from preCol-1 and decrease the col
+				for(int c = preCol-1; c > targetCol; c--) {
+					// Then we get the difference of the currently checking col
+					// And the previous col
+					int diff = Math.abs(c - preCol);
+					// We scan the list
+					for(Piece piece : GamePanel.simPieces) {
+						// And check if there is a piece that has the same col and row
+						// That is equal to the previous row minus the difference
+						if(piece.col == c && piece.row == preRow - diff) {
+							hittingP = piece;
+							return true;
+						}
+					}
+				}
+				
+				// Up right
+				for(int c = preCol+1; c < targetCol; c++) {
+					// Then we get the difference of the currently checking col
+					// And the previous col
+					int diff = Math.abs(c - preCol);
+					// We scan the list
+					for(Piece piece : GamePanel.simPieces) {
+						// And check if there is a piece that has the same col and row
+						// That is equal to the previous row minus the difference
+						if(piece.col == c && piece.row == preRow - diff) {
+							hittingP = piece;
+							return true;
+						}
+					}
+				}
+			}
+			
+			if(targetRow > preRow) {
+				// Down left
+				for(int c = preCol-1; c > targetCol; c--) {
+					// Then we get the difference of the currently checking col
+					// And the previous col
+					int diff = Math.abs(c - preCol);
+					// We scan the list
+					for(Piece piece : GamePanel.simPieces) {
+						// And check if there is a piece that has the same col and row
+						// That is equal to the previous row plus the difference
+						if(piece.col == c && piece.row == preRow + diff) {
+							hittingP = piece;
+							return true;
+						}
+					}
+				}
+				
+				// Down right
+				for(int c = preCol+1; c < targetCol; c++) {
+					// Then we get the difference of the currently checking col
+					// And the previous col
+					int diff = Math.abs(c - preCol);
+					// We scan the list
+					for(Piece piece : GamePanel.simPieces) {
+						// And check if there is a piece that has the same col and row
+						// That is equal to the previous row plus the difference
+						if(piece.col == c && piece.row == preRow + diff) {
+							hittingP = piece;
+							return true;
+						}
+					}
+				}
+			}
+			
+			return false;
+		}
 		public void draw(Graphics2D g2) {
 			// This draws the image and the x and y and width and height
 			g2.drawImage(image, x, y, Board.SQUARE_SIZE, Board.SQUARE_SIZE, null);
