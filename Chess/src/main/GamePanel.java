@@ -4,9 +4,10 @@ import java.util.ArrayList;
 import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-
+import java.awt.RenderingHints;
 
 import javax.swing.JPanel;
 
@@ -191,6 +192,8 @@ public class GamePanel extends JPanel implements Runnable{
 					// Calling the updatePosition method
 					// And adjust its position
 					activeP.updatePosition();
+					
+					changePlayer();
 				}
 				else {
 					// The move is not valid so reset everything
@@ -235,6 +238,18 @@ public class GamePanel extends JPanel implements Runnable{
 		}
 		
 	}
+	private void changePlayer() {
+		
+		// If the currentColor is white then change it to Black
+		if(currentColor == WHITE) {
+			currentColor = BLACK;
+		}
+		// And if it's Black then change it to White
+		else {
+			currentColor = WHITE;
+		}
+		activeP = null;
+	}
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		
@@ -264,6 +279,18 @@ public class GamePanel extends JPanel implements Runnable{
 			
 			// Draw the active piece in the end so it won't be hidden by the board or the colored square
 			activeP.draw(g2);
+		}
+		
+		// STATUS MESSAGES
+		g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+		g2.setFont(new Font("Book Antiqua", Font.PLAIN, 40));
+		g2.setColor(Color.white);
+		
+		if(currentColor == WHITE) {
+			g2.drawString("White's turn", 840, 550);
+		}
+		else {
+			g2.drawString("Black's turn", 840, 250);
 		}
 	}
 	
