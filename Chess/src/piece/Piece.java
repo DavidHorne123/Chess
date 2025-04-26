@@ -16,6 +16,7 @@ public class Piece {
 		public int col, row, preCol, preRow;
 		public int color;
 		public Piece hittingP;
+		public boolean moved;
 		
 		public Piece(int color, int col, int row) {
 			
@@ -76,6 +77,7 @@ public class Piece {
 			// And the piece has moved to a new square
 			preCol = getCol(x);
 			preRow = getRow(y);
+			moved = true;
 		}
 		public void resetPosition() {
 			col = preCol;
