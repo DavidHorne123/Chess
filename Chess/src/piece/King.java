@@ -35,6 +35,50 @@ public class King extends Piece{
 				}
 		
 			}
+			
+			// CASTLING
+			if(moved == false) {
+				
+				// Right castling
+				if(targetCol == preCol+2 && targetRow == preRow && pieceIsOnStraightLine(targetCol,targetRow) == false) {
+					// We scan simPices
+					for(Piece piece : GamePanel.simPieces) {
+						// And if there is a piece that is 3 squares to the right, on the same row,
+						// and hasn't moved
+						// If it hasn't moved this means this is rook
+						if(piece.col == preCol+3 && piece.row == preRow && piece.moved == false) {
+							// We get this piece as the castlingP 
+							GamePanel.castlingP = piece;
+							return true;
+						}
+					}
+				}
+				
+				
+				// Left castling
+				if(targetCol == preCol-2 && targetRow == preRow && pieceIsOnStraightLine(targetCol,targetRow) == false) {
+					Piece p[] = new Piece[2];
+					// We scan simPieces
+					for(Piece piece : GamePanel.simPieces) {
+						// If there is a piece with col-3 and the same row
+						if(piece.col == preCol-3 && piece.row == targetRow) {
+							// Then put the piece in slot 0
+							p[0] = piece;
+						}
+						// If there is a pice with col-4 and the same square
+						if(piece.col == preCol-4 && piece.row == targetRow) {
+							// Then put it in slot 1
+							p[1] = piece;
+						}
+						
+						if(p[0] == null && p[1] != null && p[1].moved == false) {
+							GamePanel.castlingP = p[1];
+							return true;
+						}
+					}
+				}
+				
+			}
 		}
 		return false;
 	}

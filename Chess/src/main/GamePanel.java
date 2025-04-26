@@ -36,6 +36,7 @@ public class GamePanel extends JPanel implements Runnable{
 	public static ArrayList<Piece> simPieces = new ArrayList<>();	
 	// The piece that the player is currently holding
 	Piece activeP;
+	public static Piece castlingP;
 	
 	// COLOR
 	public static final int WHITE = 0;
@@ -188,10 +189,14 @@ public class GamePanel extends JPanel implements Runnable{
 					// during the simulation
 					// passing the simPieces as the source and pieces as the target
 					copyPieces(simPieces, pieces);
+			
 					
 					// Calling the updatePosition method
 					// And adjust its position
 					activeP.updatePosition();
+					if(castlingP != null) {
+						castlingP.updatePosition();
+					}
 					
 					changePlayer();
 				}
@@ -214,6 +219,13 @@ public class GamePanel extends JPanel implements Runnable{
 		// Reset the piece list in every loop
 		// This is basically for restoring the removes piece during simulation
 		copyPieces(pieces, simPieces);
+		
+		// Reset the castling piece's position
+		if(castlingP != null) {
+			castlingP.col = castlingP.preCol;
+			castlingP.x = castlingP.getX(castlingP.col);
+					castlingP = null;
+		}
 
 		// If a piece is being held, update its position
 		// Here we update the activeP's x and y based on the player's mouse position
@@ -234,9 +246,29 @@ public class GamePanel extends JPanel implements Runnable{
 				simPieces.remove(activeP.hittingP.getIndex());
 			}
 			
+			checkCastling();
+			
 			validSquare = true;
 		}
 		
+	}
+	private void checkCastling() {
+		
+		if(castlingP != null) {
+			// The castlingP's call is 0
+			if(castlingP.col == 0) {
+				// Which means it's the rook on the left
+				// and in this case the rook moves by 3 squares
+				castlingP.col += 3;
+			}
+			// If the col is 7, then it's the rook on the right
+			else if(castlingP.col == 7) {
+				// and it moves two squares
+				castlingP.col -= 2;
+			}
+			// Update castlingP.x based on the col
+			castlingP.x = castlingP.getX(castlingP.col);
+		}
 	}
 	private void changePlayer() {
 		
