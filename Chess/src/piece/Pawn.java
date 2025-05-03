@@ -1,11 +1,15 @@
 package piece;
 
 import main.GamePanel;
+import main.Type;
 
 public class Pawn extends Piece{
 
 	public Pawn(int color, int col, int row) {
 		super(color, col, row);
+		
+		type = Type.PAWN;
+		
 		// If the pawn's color is White use the white image
 		if(color == GamePanel.WHITE) {
 			image = getImage("/piece/w-pawn");

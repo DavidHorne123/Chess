@@ -8,9 +8,11 @@ import javax.imageio.ImageIO;
 
 import main.Board;
 import main.GamePanel;
+import main.Type;
 
 public class Piece {
-
+		
+		public Type type;
 		public BufferedImage image;
 		public int x, y;
 		public int col, row, preCol, preRow;

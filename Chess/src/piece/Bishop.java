@@ -1,11 +1,15 @@
 package piece;
 
 import main.GamePanel;
+import main.Type;
 
 public class Bishop extends Piece{
 
 	public Bishop(int color, int col, int row) {
 		super(color, col, row);
+		
+		type = Type.BISHOP;
+		
 		// If the bishop's color is White use the white image
 		if(color == GamePanel.WHITE) {
 			image = getImage("/piece/w-bishop");
