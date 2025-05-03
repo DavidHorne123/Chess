@@ -60,7 +60,18 @@ public class Pawn extends Piece{
 				return true;
 			}
 			// En Passant
-			
+			if(Math.abs(targetCol - preCol) == 1 && targetRow == preRow + moveValue) {
+				// We scan the list
+				for(Piece piece : GamePanel.simPieces) {
+					// If there is a piece that its col is equal to the targetCol
+					// and its row is equal to the preRow and this piece's twoStepped movement is true
+					if(piece.col == targetCol && piece.row == preRow && piece.twoStepped == true) {
+						// Then we can do En Passant
+						hittingP = piece;
+						return true;
+					}
+				}
+			}
 			
 		}
 		return false;

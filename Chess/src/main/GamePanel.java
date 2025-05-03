@@ -275,10 +275,24 @@ public class GamePanel extends JPanel implements Runnable{
 		// If the currentColor is white then change it to Black
 		if(currentColor == WHITE) {
 			currentColor = BLACK;
+			// Reset black's two stepped status
+			for(Piece piece : pieces) {
+				if(piece.color == BLACK) {
+					// Disable all the twoStepped pieces to false
+					piece.twoStepped = false;
+				}
+			}
 		}
 		// And if it's Black then change it to White
 		else {
 			currentColor = WHITE;
+			// Reset white's two stepped status
+			for(Piece piece : pieces) {
+				if(piece.color == WHITE) {
+					// Disable all the twoStepped pieces to false
+					piece.twoStepped = false;
+				}
+			}
 		}
 		activeP = null;
 	}

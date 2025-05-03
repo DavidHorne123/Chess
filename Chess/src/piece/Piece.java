@@ -71,6 +71,17 @@ public class Piece {
 		}
 		public void updatePosition() {
 			
+			// To check En Passant
+			// When we update the piece position we check
+			// If the piece is pawn or not
+			if(type == Type.PAWN) {
+				// If it's pawn we check if the row difference is 2
+				if(Math.abs(row - preRow) == 2) {
+					// If it is it moved by two squares so twoStepped becomes true
+					twoStepped = true;
+				}
+			}
+			
 			// We update its X and Y based on its current col and row
 			// This adjusts its position and places it at the center of the square
 			x = getX(col);
