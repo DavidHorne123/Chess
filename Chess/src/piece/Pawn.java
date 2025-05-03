@@ -55,6 +55,7 @@ public class Pawn extends Piece{
 					hittingP.color != color) {
 				return true;
 			}
+			// En Passant
 			
 			
 		}

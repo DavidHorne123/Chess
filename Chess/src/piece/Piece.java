@@ -16,7 +16,7 @@ public class Piece {
 		public int col, row, preCol, preRow;
 		public int color;
 		public Piece hittingP;
-		public boolean moved;
+		public boolean moved, twoStepped;
 		
 		public Piece(int color, int col, int row) {
 			
