@@ -34,6 +34,7 @@ public class GamePanel extends JPanel implements Runnable{
 	// the player made
 	public static ArrayList<Piece> pieces = new ArrayList<>();
 	public static ArrayList<Piece> simPieces = new ArrayList<>();	
+	ArrayList<Piece> promoPieces = new ArrayList<>();
 	// The piece that the player is currently holding
 	Piece activeP;
 	public static Piece castlingP;
@@ -47,6 +48,7 @@ public class GamePanel extends JPanel implements Runnable{
 	// BOOLEANS
 	boolean canMove;
 	boolean validSquare; 
+	boolean promotion;
 	
 	
 	public GamePanel() {
@@ -145,7 +147,14 @@ public class GamePanel extends JPanel implements Runnable{
 		}
 		
 	}
+	
 	private void update() {
+		
+		if(promotion) {
+			
+		}else {
+			
+		}
 		
 		if(mouse.pressed) {
 			// MOUSE BUTTON PRESSED 
@@ -198,7 +207,12 @@ public class GamePanel extends JPanel implements Runnable{
 						castlingP.updatePosition();
 					}
 					
-					changePlayer();
+					if(canPromote()) {
+						promotion = true;
+					}else {
+						changePlayer();
+					}
+					
 				}
 				else {
 					// The move is not valid so reset everything
@@ -295,6 +309,23 @@ public class GamePanel extends JPanel implements Runnable{
 			}
 		}
 		activeP = null;
+	}
+	private boolean canPromote() {
+		
+		if(activeP.type == Type.PAWN) {
+			// If it's a white piece, check if its row is 0
+			// If it's a black piece, check if its row is 7
+			if(currentColor == WHITE && activeP.row == 0 || currentColor == BLACK && activeP.row == 7) {
+				promoPieces.clear();
+				promoPieces.add(new Rook(currentColor,9,2));
+				promoPieces.add(new Knight(currentColor,9,3));
+				promoPieces.add(new Bishop(currentColor,9,4));
+				promoPieces.add(new Queen(currentColor,9,5));
+				return true;
+			}
+		}
+		
+		return false;
 	}
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
