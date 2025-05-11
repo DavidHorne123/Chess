@@ -59,7 +59,7 @@ public class GamePanel extends JPanel implements Runnable{
 		addMouseListener(mouse);
 		
 		setPieces();
-		testPromotion();
+		//testPromotion();
 		// pass the pieces as the source
 		// pass the simPieces as the target
 		copyPieces(pieces, simPieces);
@@ -267,9 +267,28 @@ public class GamePanel extends JPanel implements Runnable{
 			
 			checkCastling();
 			
-			validSquare = true;
+			if(isIllegal(activeP) == false) {
+				validSquare = true;
+			}
 		}
-		
+	}
+	
+	private boolean isIllegal(Piece king) {
+	    // Check if the piece passed in is a king
+	    if (king.type == Type.KING) {
+	        // Iterate through all simulated pieces on the board
+	        for (Piece piece : simPieces) {
+	            // Check if there is a piece that is not king and has a different color 
+	        	// and can move to the square where the king is trying to move to
+	            if (piece != king && piece.color != king.color && piece.canMove(king.col, king.row)) {
+
+	        
+	                return true;
+	            }
+	        }
+	    }
+	    // If no opposing piece can capture the king, the move is legal
+	    return false;
 	}
 	private void checkCastling() {
 		
@@ -377,15 +396,27 @@ public class GamePanel extends JPanel implements Runnable{
 		// If activeP is not null
 		if(activeP != null) {
 			if(canMove) {
-				// First we set the color on graphics 2D
-				g2.setColor(Color.white);
-				g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f));
-				// Draw a rectangle
-				// X is col 
-				// Y is row
-				g2.fillRect(activeP.col*Board.SQUARE_SIZE, activeP.row*Board.SQUARE_SIZE, 
-						Board.SQUARE_SIZE, Board.SQUARE_SIZE);
-				g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+				if(isIllegal(activeP )) {
+					g2.setColor(Color.gray);
+					g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f));
+					// Draw a rectangle
+					// X is col 
+					// Y is row
+					g2.fillRect(activeP.col*Board.SQUARE_SIZE, activeP.row*Board.SQUARE_SIZE, 
+							Board.SQUARE_SIZE, Board.SQUARE_SIZE);
+					g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+				}
+				else {
+					// First we set the color on graphics 2D
+					g2.setColor(Color.white);
+					g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f));
+					// Draw a rectangle
+					// X is col 
+					// Y is row
+					g2.fillRect(activeP.col*Board.SQUARE_SIZE, activeP.row*Board.SQUARE_SIZE, 
+							Board.SQUARE_SIZE, Board.SQUARE_SIZE);
+					g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+				}
 			}
 			
 			// Draw the active piece in the end so it won't be hidden by the board or the colored square
