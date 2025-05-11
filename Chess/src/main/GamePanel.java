@@ -59,6 +59,7 @@ public class GamePanel extends JPanel implements Runnable{
 		addMouseListener(mouse);
 		
 		setPieces();
+		testPromotion();
 		// pass the pieces as the source
 		// pass the simPieces as the target
 		copyPieces(pieces, simPieces);
@@ -109,6 +110,7 @@ public class GamePanel extends JPanel implements Runnable{
 	}
 	public void testPromotion() {
 		pieces.add(new Pawn(WHITE, 0, 4));
+		pieces.add(new Pawn(BLACK,5,4));
 	}
 	// This method receives two lists
 	private void copyPieces(ArrayList<Piece> source, ArrayList<Piece> target) {
@@ -331,6 +333,32 @@ public class GamePanel extends JPanel implements Runnable{
 		return false;
 	}
 	private void promoting() {
+		// Check if mouse is pressed
+		if(mouse.pressed) {
+			for(Piece piece : promoPieces) {
+				// If there is a piece that has the same column and row
+				// as the mouse col and row
+				// that means the mouse is on one of those pieces
+				if(piece.col == mouse.x/Board.SQUARE_SIZE && piece.row == mouse.y/Board.SQUARE_SIZE) {
+					// Using switch case to check the piece type
+					switch(piece.type) {
+					case ROOK: simPieces.add(new Rook(currentColor, activeP.col, activeP.row)); break;
+					case KNIGHT: simPieces.add(new Knight(currentColor, activeP.col, activeP.row)); break;
+					case BISHOP: simPieces.add(new Bishop(currentColor, activeP.col, activeP.row)); break;
+					case QUEEN: simPieces.add(new Queen(currentColor, activeP.col, activeP.row)); break;
+					default: break;
+					}
+					// Then remove the pawn from the list
+					simPieces.remove(activeP.getIndex());
+					// Update the backup list too
+					copyPieces(simPieces, pieces);
+					activeP = null;
+					promotion = false;
+					// call the changePlayer function
+					changePlayer();
+				}
+			}
+		}
 		
 	}
 	public void paintComponent(Graphics g) {
@@ -378,12 +406,13 @@ public class GamePanel extends JPanel implements Runnable{
 						Board.SQUARE_SIZE, Board.SQUARE_SIZE, null);
 			}
 		}
-		
-		if(currentColor == WHITE) {
-			g2.drawString("White's turn", 840, 550);
-		}
 		else {
-			g2.drawString("Black's turn", 840, 250);
+			if(currentColor == WHITE) {
+				g2.drawString("White's turn", 840, 550);
+			}
+			else {
+				g2.drawString("Black's turn", 840, 250);
+			}
 		}
 	}
 	
