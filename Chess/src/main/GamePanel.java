@@ -50,6 +50,7 @@ public class GamePanel extends JPanel implements Runnable{
 	boolean validSquare; 
 	boolean promotion;
 	boolean gameover;
+	boolean stalemate;
 	
 	
 	public GamePanel() {
@@ -159,7 +160,7 @@ public class GamePanel extends JPanel implements Runnable{
 		if(promotion) {
 			promoting();
 		}
-		else if(gameover == false){
+		else if(gameover == false && stalemate == false){
 			// MOUSE BUTTON PRESSED 
 			if(mouse.pressed) {
 				// check if activeP is null
@@ -213,6 +214,9 @@ public class GamePanel extends JPanel implements Runnable{
 						
 						if(isKingInCheck() && isCheckmate()) {
 							gameover = true;
+						}
+						else if(isStalemate() && isKingInCheck() == false) {
+							stalemate = true;
 						}
 						else { // The game is still going on
 							if(canPromote()) {
@@ -528,6 +532,26 @@ public class GamePanel extends JPanel implements Runnable{
 		
 		return isValidMove;
 	}
+	private boolean isStalemate() {
+		
+		int count = 0;
+		// Count the number of pieces
+		for(Piece piece : simPieces) {
+			if(piece.color != currentColor) {
+				count++;
+			}
+		}
+		
+		// If only one piece (the king) is left
+		if(count == 1) {
+			// Call the kingCanMove and pass the opponent king
+			if(kingCanMove(getKing(true)) == false) {
+				return false;
+			}
+		}
+		
+		return false;
+	}
 	private void checkCastling() {
 		
 		if(castlingP != null) {
@@ -709,6 +733,11 @@ public class GamePanel extends JPanel implements Runnable{
 			g2.setFont(new Font("Arial", Font.PLAIN, 90));
 			g2.setColor(Color.green);
 			g2.drawString(s, 200, 420);
+		}
+		if(stalemate) {
+			g2.setFont(new Font("Arial", Font.PLAIN, 90));
+			g2.setColor(Color.lightGray);
+			g2.drawString("Stalemate", 200, 420);
 		}
 	}
 }
