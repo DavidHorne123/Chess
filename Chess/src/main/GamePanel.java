@@ -8,6 +8,8 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.util.Stack;
+
 
 import javax.swing.JPanel;
 
@@ -27,6 +29,8 @@ public class GamePanel extends JPanel implements Runnable{
 	Thread gameThread;
 	Board board = new Board();
 	Mouse mouse = new Mouse();
+	Stack<ArrayList<Piece>> moveHistory = new Stack<>();
+
 	
 	// PIECES
 	// Both ArrayLists contain the pieces currently on the board
@@ -65,6 +69,15 @@ public class GamePanel extends JPanel implements Runnable{
 		// pass the pieces as the source
 		// pass the simPieces as the target
 		copyPieces(pieces, simPieces);
+		
+		javax.swing.JButton undoButton = new javax.swing.JButton("Undo");
+		undoButton.setBounds(700, 0, 300, 100);
+		undoButton.addActionListener(e -> undoMove());
+		setLayout(null);
+		add(undoButton);
+		
+		undoButton.setFocusable(false);
+		undoButton.setVisible(true);
 	}
 	public void launchGame() {
 		gameThread = new Thread(this);
@@ -157,6 +170,8 @@ public class GamePanel extends JPanel implements Runnable{
 	
 	private void update() {
 		
+		
+		
 		if(promotion) {
 			promoting();
 		}
@@ -197,6 +212,8 @@ public class GamePanel extends JPanel implements Runnable{
 					// If validSquare is true, then we update the position
 					if(validSquare) {
 						
+						saveCurrentState();
+
 						// Move confirmed
 						
 						// Update the piece list in case a piece has been captured and removed
@@ -238,6 +255,27 @@ public class GamePanel extends JPanel implements Runnable{
 			}
 		}
 	}
+	private void saveCurrentState() {
+		 ArrayList<Piece> snapshot = new ArrayList<>();
+		    
+		    for (Piece p : pieces) {
+		        snapshot.add(p.copy()); // we will create this method next
+		    }
+		    
+		    moveHistory.push(snapshot);
+		// TODO Auto-generated method stub
+		
+	}
+	
+	public void undoMove() {
+	    if (!moveHistory.isEmpty()) {
+	        pieces = moveHistory.pop();
+	        copyPieces(pieces, simPieces);
+	        changePlayer(); // switch back turn
+	        repaint();
+	    }
+	}
+
 	private void stimulate() {
 		
 		canMove = false;
