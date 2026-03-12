@@ -71,7 +71,7 @@ public class GamePanel extends JPanel implements Runnable{
 		copyPieces(pieces, simPieces);
 		
 		javax.swing.JButton undoButton = new javax.swing.JButton("Undo");
-		undoButton.setBounds(700, 0, 300, 100);
+		undoButton.setBounds(700, 0, 100, 100);
 		undoButton.addActionListener(e -> undoMove());
 		setLayout(null);
 		add(undoButton);
