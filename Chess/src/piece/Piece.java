@@ -10,7 +10,7 @@ import main.Board;
 import main.GamePanel;
 import main.Type;
 
-public class Piece {
+public class Piece implements Cloneable{
 		
 		public Type type;
 		public BufferedImage image;
@@ -283,5 +283,13 @@ public class Piece {
 		public void draw(Graphics2D g2) {
 			// This draws the image and the x and y and width and height
 			g2.drawImage(image, x, y, Board.SQUARE_SIZE, Board.SQUARE_SIZE, null);
+		}
+		public Piece copy() {
+		    try {
+		        return (Piece) this.clone();
+		    } catch (CloneNotSupportedException e) {
+		        e.printStackTrace();
+		        return null;
+		    }
 		}
 }
